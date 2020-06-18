@@ -11,7 +11,7 @@ function App() {
       setRepositories(response.data);
     });
 
-  }, []);
+  }, [repositories]);
 
   async function handleAddRepository() {
     const response = await api.post('/repositories', {
@@ -23,20 +23,23 @@ function App() {
     const newRepository = response.data;
 
     setRepositories([...repositories, newRepository]);
-
   }
 
   async function handleRemoveRepository(id) {
-    // TODO
+    await api.delete(`/repositories/${id}`).then(response => {
+      const repositoryIndex = repositories.findIndex(repository => repository.id === id);
+      
+      setRepositories(repositories.splice(repositoryIndex, 1));
+    });
   }
 
   return (
     <div>
       <ul data-testid="repository-list">
         {
-          repositories.map(repository => (<li>
+          repositories.map(repository => (<li key={repository.id}>
             {repository.title}
-            <button onClick={() => handleRemoveRepository(1)}>
+            <button onClick={() => handleRemoveRepository(repository.id)}>
               Remover
             </button>
           </li>))
