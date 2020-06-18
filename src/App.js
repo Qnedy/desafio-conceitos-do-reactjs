@@ -14,7 +14,16 @@ function App() {
   }, []);
 
   async function handleAddRepository() {
-    // TODO
+    const response = await api.post('/repositories', {
+      title: "desafio-conceitos-do-reactjs",
+      url: "https://github.com/Qnedy/desafio-conceitos-do-reactjs",
+      techs: ["nodejs", "javascript, axios, reactjs"]
+    });
+
+    const newRepository = response.data;
+
+    setRepositories([...repositories, newRepository]);
+
   }
 
   async function handleRemoveRepository(id) {
